@@ -4,6 +4,8 @@ using namespace std;
   Game::Game(Board& board):board(board)
   {
     init(board);
+  //  color = new Color();
+    display = new Display(color);
   }
 
   void Game::init(Board& board)
@@ -77,7 +79,7 @@ using namespace std;
     else
       playerTurn = PLAYER_X;
   }
-
+/*
   void Game::display_grid(SDL_Renderer *renderer, const SDL_Color *color)
   {
     SDL_SetRenderDrawColor(renderer, color->r, color->g, color->b, color->a);
@@ -87,8 +89,8 @@ using namespace std;
       SDL_RenderDrawLine(renderer, 0, i * CELL_HEIGHT, SCREEN_WIDTH, i * CELL_HEIGHT);
     }
   }
-
-
+*/
+/*
   void Game::display_cross(SDL_Renderer *renderer, int line, int column, const SDL_Color *color)
   {
     const float centerX = CELL_WIDTH * 0.5 + column * CELL_WIDTH;
@@ -108,7 +110,8 @@ using namespace std;
     filledCircleRGBA(renderer, centerX, centerY, half_box_side + 5, color->r, color->g, color->b, color->a);
     filledCircleRGBA(renderer, centerX, centerY, half_box_side - 5, 0, 0, 0, 255);
   }
-
+*/
+/*
   void Game::display_board(SDL_Renderer *renderer, const SDL_Color *player_x_color, const SDL_Color *player_o_color)
   {
     board_t grid = board.get_board();
@@ -123,17 +126,17 @@ using namespace std;
         }
       }
   }
-
+*/
   void Game::running_state(SDL_Renderer *renderer)
   {
-    display_grid(renderer, &GRID_COLOR);
-    display_board(renderer, &PLAYER_X_COLOR, &PLAYER_O_COLOR);
+    display->grid(renderer, color.get_color(GRID_COLOR));
+    display->board(renderer, get_state());
   }
 
   void Game::gameover_state(SDL_Renderer *renderer, const SDL_Color *color)
   {
-    display_grid(renderer, color);
-    display_board(renderer, color, color);
+    display->display_grid(renderer, color.get_color(TIE_COLOR));
+    display_board(renderer, get_state());
   }
 
   void Game::update_game(SDL_Renderer *renderer)
@@ -144,13 +147,13 @@ using namespace std;
         running_state(renderer);
         break;
       case PLAYER_X_WON_STATE:
-        gameover_state(renderer, &PLAYER_X_COLOR);
+        gameover_state(renderer, color->get_color(PLAYER_X_COLOR));
         break;
       case PLAYER_O_WON_STATE:
-        gameover_state(renderer, &PLAYER_O_COLOR);
+        gameover_state(renderer, color->get_color(PLAYER_O_COLOR));
         break;
       case TIE_STATE:
-        gameover_state(renderer, &TIE_COLOR);
+        gameover_state(renderer, color->get_color(TIE_COLOR));
       default : {}
     }
   }
