@@ -23,7 +23,9 @@ SRC_FILES = main.cc \
 						error.cc \
 						run.cc \
 						board.cc \
-						game.cc 
+						game.cc \
+						display.cc \
+						color.cc
 						#rendering.c \
 #						logic.c \
 
