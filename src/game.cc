@@ -19,6 +19,10 @@ using namespace std;
     return state;
   }
 
+  int Game::get_player_turn()
+  {
+    return playerTurn;
+  }
   void Game::set_state(int newState)
   {
     state = newState;
@@ -74,7 +78,7 @@ using namespace std;
   void Game::switch_player()
   {
     if (playerTurn == PLAYER_X)
-      playerTurn = PLAYER_0;
+      playerTurn = PLAYER_O;
     else
       playerTurn = PLAYER_X;
   }
