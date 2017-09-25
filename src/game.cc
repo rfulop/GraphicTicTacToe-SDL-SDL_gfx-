@@ -45,7 +45,7 @@ using namespace std;
           if (grid[j][i] == symbol)
             ++columnCount;
       }
-      if (lineCount >= BOARD_SIZE || columnCount >= BOARD_SIZE)
+      if (lineCount >= PAWNS_TO_WIN || columnCount >= PAWNS_TO_WIN)
         return true;
       lineCount = 0;
       columnCount = 0;
@@ -54,7 +54,7 @@ using namespace std;
       if (grid[i][BOARD_SIZE -1 - i] == symbol)
         diag2Count++;
     }
-    return (diag1Count >= BOARD_SIZE || diag2Count >= BOARD_SIZE ? true : false);
+    return (diag1Count >= PAWNS_TO_WIN || diag2Count >= PAWNS_TO_WIN ? true : false);
   }
 
   void Game::update_state(Board board)
@@ -65,6 +65,8 @@ using namespace std;
       state = PLAYER_O_WON_STATE;
     else if (board.count_cells(empty))
       state = TIE_STATE;
+    else
+      state = RUNNING_STATE;
   }
 
   symbol_t Game::get_symbol()
@@ -75,12 +77,37 @@ using namespace std;
       return circle;
   }
 
+  symbol_t Game::get_winner()
+  {
+    if (state == PLAYER_X_WON_STATE)
+      return cross;
+    else if (state == PLAYER_O_WON_STATE)
+      return circle;
+    else
+      return empty;
+  }
+
   void Game::switch_player()
   {
     if (playerTurn == PLAYER_X)
       playerTurn = PLAYER_O;
     else
       playerTurn = PLAYER_X;
+  }
+
+
+  void Game::play_move(Board& board, int i, int j)
+  {
+    board.click_on_board(i, j, get_symbol());
+    switch_player();
+    update_state(board);
+  }
+
+  void Game::cancel_move(Board& board, int i, int j)
+  {
+    board.set_case(i, j, empty);
+    switch_player();
+    update_state(board);
   }
 
   void Game::update_game(SDL_Renderer *renderer)

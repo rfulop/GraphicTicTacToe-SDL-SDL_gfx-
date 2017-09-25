@@ -3,11 +3,7 @@ using namespace std;
 
 int main()
 {
-  cout << "empty = " << empty << endl;
-  cout << "x = " << cross << endl;
-  cout << "o = " << circle << endl;
-  cout << "PLAYER_X = " << PLAYER_X << endl;
-  cout << "PLAYER_O = " << PLAYER_O << endl;
+  std::srand(std::time(0));
   if (SDL_Init(SDL_INIT_VIDEO))
     sdl_print_error(INIT_ERROR);
 

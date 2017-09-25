@@ -1,37 +1,48 @@
 #include "game.h"
 using namespace std;
-
-
+using namespace this_thread;
+using namespace chrono;
 
 void run_game(SDL_Renderer *renderer)
 {
   Board board;
   Game game(board);
+  Ai ai;
 
   SDL_Event event;
   while (game.get_state() != QUIT_STATE)
   {
-    while (SDL_PollEvent(&event))
+    if (game.get_symbol() == cross)
     {
-      switch (event.type)
+      while (SDL_PollEvent(&event))
       {
-        case SDL_QUIT:
-          game.set_state(QUIT_STATE);
-          break;
-        case SDL_MOUSEBUTTONDOWN:
+        switch (event.type)
         {
-          if (game.get_state() == RUNNING_STATE)
+          case SDL_QUIT:
+            game.set_state(QUIT_STATE);
+            break;
+          case SDL_MOUSEBUTTONDOWN:
           {
-            board.click_on_board(event.button.y / CELL_HEIGHT, event.button.x / CELL_WIDTH, game.get_symbol());
-            game.switch_player();
-            game.update_state(board);
+            if (game.get_state() == RUNNING_STATE)
+            {
+              board.click_on_board(event.button.y / CELL_HEIGHT, event.button.x / CELL_WIDTH, game.get_symbol());
+              game.switch_player();
+              game.update_state(board);
+            }
+            else
+              game.init(board);
+            break;
           }
-          else
-            game.init(board);
-          break;
+          default: {}
         }
-        default: {}
       }
+    }
+    else if (game.get_state() == RUNNING_STATE)
+      ai.play(game, board, AI_EASY);
+    else
+    {
+      sleep_until(system_clock::now() + seconds(1));
+      game.init(board);
     }
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);

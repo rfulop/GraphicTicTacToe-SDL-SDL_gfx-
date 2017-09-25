@@ -1,5 +1,7 @@
 #include "game.h"
 using namespace std;
+using namespace this_thread;
+using namespace chrono;
 
 int Ai::score_pawns(int pawns, int player)
 {
@@ -23,12 +25,12 @@ int Ai::eval(Game& game, Board& board)
 
   if (game.get_state() != RUNNING_STATE)
   {
-    if (game.get_state() == PLAYER_X_WON_STATE)
-      return -1000 + count_pawns(board);
-    else if (game.get_state() == PLAYER_O_WON_STATE)
+    if (game.get_winner() == currentPlayer)
       return 1000 - count_pawns(board);
-    else
+    else if (game.get_winner() == empty)
       return 0;
+    else
+      return -1000 + count_pawns(board);
   }
 
   pawns = 0;
@@ -110,7 +112,7 @@ int Ai::count_pawns(Board& board)
   return pawns;
 }
 
-void Ai::calc_move(Game &game, Board &board, int depth)
+void Ai::play(Game &game, Board &board, int depth)
 {
   int tmp;
   int max = minEval;
@@ -119,28 +121,28 @@ void Ai::calc_move(Game &game, Board &board, int depth)
   board_t tab = board.get_board();
 
   currentPlayer = game.get_symbol();
-  if (depth || game.get_state() == RUNNING_STATE)
+  if (!depth || game.get_state() != RUNNING_STATE)
+    return ;
+  for (int i = 0; i < BOARD_SIZE; ++i)
   {
-    for (int i = 0; i < BOARD_SIZE; ++i)
+    for (int j = 0; j < BOARD_SIZE; ++j)
     {
-      for (int j = 0; j < BOARD_SIZE; ++j)
+      if (tab[i][j] == empty)
       {
-        if (tab[i][j] == empty)
+        game.play_move(board, i, j);
+        tmp = calc_min(game, board, depth - 1);
+        if (tmp > max || ((tmp == max) && (rand()%2)))
         {
-          board.click_on_board(i, j, currentPlayer);
-          tmp = calc_min(game, board, depth - 1);
-          if (tmp >= max)
-          {
-            max = tmp;
-            maxI = i;
-            maxJ = j;
-          }
-          board.set_case(i, j, empty);
+          max = tmp;
+          maxI = i;
+          maxJ = j;
         }
+        game.cancel_move(board, i, j);
       }
     }
   }
-  board.click_on_board(maxI, maxJ, currentPlayer);
+  sleep_until(system_clock::now() + seconds(1));
+  game.play_move(board, maxI, maxJ);
 }
 
 int Ai::calc_min(Game &game, Board &board, int depth)
@@ -157,11 +159,11 @@ int Ai::calc_min(Game &game, Board &board, int depth)
     {
       if (tab[i][j] == empty)
       {
-            board.click_on_board(i, j, currentPlayer);
+            game.play_move(board, i, j);
             tmp = calc_max(game, board, depth -1);
             if (tmp < min)
               min = tmp;
-            board.set_case(i, j, empty);
+            game.cancel_move(board, i, j);
       }
     }
   }
@@ -182,11 +184,11 @@ int Ai::calc_max(Game &game, Board &board, int depth)
     {
       if (tab[i][j] == empty)
       {
-            board.click_on_board(i, j, currentPlayer);
+            game.play_move(board, i, j);
             tmp = calc_min(game, board, depth -1);
             if (tmp > max)
               max = tmp;
-            board.set_case(i, j, empty);
+            game.cancel_move(board, i, j);
       }
     }
   }

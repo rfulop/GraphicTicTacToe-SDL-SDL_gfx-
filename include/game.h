@@ -9,8 +9,15 @@ using namespace std;
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <cmath>
 #include <climits>
+#include <chrono>
+#include <thread>
+#include <ctime>
 
-#define BOARD_SIZE 3
+#define BOARD_SIZE 5
+#define PAWNS_TO_WIN 3
+#define AI_EASY BOARD_SIZE / BOARD_SIZE
+#define AI_MEDIUM BOARD_SIZE
+#define AI_HARD BOARD_SIZE * BOARD_SIZE
 #define SCREEN_WIDTH 640.0
 #define SCREEN_HEIGHT 480.0
 #define CELL_WIDTH (SCREEN_WIDTH / BOARD_SIZE)
@@ -94,11 +101,14 @@ public:
   void init(Board& board);
   int get_state();
   int get_player_turn();
+  symbol_t get_winner();
   void set_state(int newState);
   bool check_player_won(symbol_t symbol);
   void update_state(Board board);
   symbol_t get_symbol();
   void switch_player();
+  void play_move(Board& board, int i, int j);
+  void cancel_move(Board& board, int i, int j);
   void update_game(SDL_Renderer *renderer);
 };
 class Ai
@@ -110,7 +120,7 @@ private:
 
 public:
 //  IA();
-  void calc_move(Game& game, Board& board, int depth);
+  void play(Game& game, Board& board, int depth);
   int calc_min(Game& game, Board& board, int depth);
   int calc_max(Game& game, Board& board, int depth);
   int score_pawns(int pawns, int player);
