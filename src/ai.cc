@@ -14,19 +14,19 @@ int Ai::score_pawns(int pawns, int player)
   }
 }
 
-int Ai::eval(Game& game)
+int Ai::eval(Game& game, Board& board)
 {
   int score = 0;
   int pawns;
   int player;
-  board_t tab = game.board.get_board();
+  board_t tab = board.get_board();
 
-  if (game->state != RUNNING_STATE)
+  if (game.get_state() != RUNNING_STATE)
   {
-    if (game->state == PLAYER_X_WON_STATE)
-      return -1000 + count_pawns(game);
-    else if (game->state == PLAYER_O_WON_STATE)
-      return 1000 - count_pawns(game);
+    if (game.get_state() == PLAYER_X_WON_STATE)
+      return -1000 + count_pawns(board);
+    else if (game.get_state() == PLAYER_O_WON_STATE)
+      return 1000 - count_pawns(board);
     else
       return 0;
   }
@@ -38,7 +38,7 @@ int Ai::eval(Game& game)
     if (tab[i][i] != empty)
     {
       ++pawns;
-      if (game.get_player_turn() == tab[i][i])
+      if (currentPlayer == tab[i][i])
         ++player;
       else
         --player;
@@ -53,7 +53,7 @@ int Ai::eval(Game& game)
     if (tab[i][BOARD_SIZE -1 -i] != empty)
     {
       ++pawns;
-      if (game.get_player_turn() == tab[i][BOARD_SIZE -1 -i])
+      if (currentPlayer == tab[i][BOARD_SIZE -1 -i])
         ++player;
       else
         --player;
@@ -70,7 +70,7 @@ int Ai::eval(Game& game)
       if (tab[i][j] != empty)
       {
         ++pawns;
-        if (game.get_player_turn() == tab[i][j])
+        if (currentPlayer == tab[i][j])
           ++player;
         else
           --player;
@@ -87,7 +87,7 @@ int Ai::eval(Game& game)
       if (tab[j][i] != empty)
       {
         ++pawns;
-        if (game.get_player_turn() == tab[j][i])
+        if (currentPlayer == tab[j][i])
           ++player;
         else
           --player;
@@ -98,10 +98,10 @@ int Ai::eval(Game& game)
   return score;
 }
 
-int Ai::count_pawns(Game &game)
+int Ai::count_pawns(Board& board)
 {
   int pawns = 0;
-  board_t tab = game.board.get_board();
+  board_t tab = board.get_board();
 
   for (int i = 0; i < BOARD_SIZE; ++i)
     for (int j = 0; j < BOARD_SIZE; ++j)
@@ -110,6 +110,85 @@ int Ai::count_pawns(Game &game)
   return pawns;
 }
 
-void Ai::calc_move(Game &game, int depth)
+void Ai::calc_move(Game &game, Board &board, int depth)
 {
+  int tmp;
+  int max = minEval;
+  int maxI = -1;
+  int maxJ = -1;
+  board_t tab = board.get_board();
+
+  currentPlayer = game.get_symbol();
+  if (depth || game.get_state() == RUNNING_STATE)
+  {
+    for (int i = 0; i < BOARD_SIZE; ++i)
+    {
+      for (int j = 0; j < BOARD_SIZE; ++j)
+      {
+        if (tab[i][j] == empty)
+        {
+          board.click_on_board(i, j, currentPlayer);
+          tmp = calc_min(game, board, depth - 1);
+          if (tmp >= max)
+          {
+            max = tmp;
+            maxI = i;
+            maxJ = j;
+          }
+          board.set_case(i, j, empty);
+        }
+      }
+    }
+  }
+  board.click_on_board(maxI, maxJ, currentPlayer);
+}
+
+int Ai::calc_min(Game &game, Board &board, int depth)
+{
+  int tmp;
+  int min = maxEval;
+  board_t tab = board.get_board();
+
+  if (!depth || game.get_state() != RUNNING_STATE)
+    return eval(game, board);
+  for (int i = 0; i < BOARD_SIZE; ++i)
+  {
+    for (int j = 0; j < BOARD_SIZE; ++j)
+    {
+      if (tab[i][j] == empty)
+      {
+            board.click_on_board(i, j, currentPlayer);
+            tmp = calc_max(game, board, depth -1);
+            if (tmp < min)
+              min = tmp;
+            board.set_case(i, j, empty);
+      }
+    }
+  }
+  return min;
+}
+
+int Ai::calc_max(Game &game, Board &board, int depth)
+{
+  int tmp;
+  int max = minEval;
+  board_t tab = board.get_board();
+
+  if (!depth || game.get_state() != RUNNING_STATE)
+    return eval(game, board);
+  for (int i = 0; i < BOARD_SIZE; ++i)
+  {
+    for (int j = 0; j < BOARD_SIZE; ++j)
+    {
+      if (tab[i][j] == empty)
+      {
+            board.click_on_board(i, j, currentPlayer);
+            tmp = calc_min(game, board, depth -1);
+            if (tmp > max)
+              max = tmp;
+            board.set_case(i, j, empty);
+      }
+    }
+  }
+  return max;
 }

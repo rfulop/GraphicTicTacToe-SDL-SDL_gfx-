@@ -41,22 +41,6 @@ typedef array<array<symbol_t, BOARD_SIZE>, BOARD_SIZE> board_t;
 void sdl_print_error(int errorNum);
 void run_game(SDL_Renderer *renderer);
 
-class Ai
-{
-private:
-  const int maxEval = INT_MAX;
-  const int minEval = INT_MIN;
-
-public:
-  IA();
-  void calc_move(Game& game, int depth);
-  int calc_min(Game& game, int depth);
-  int calc_Max(Game& game, int depth);
-  int score_pawns(int pawns, int player);
-  int eval(Game& game);
-  int count_pawns(Game& game);
-};
-
 class Board
 {
 private:
@@ -64,7 +48,8 @@ private:
 public:
   Board();
   void init();
-  board_t get_board();;
+  board_t get_board();
+  void set_case(int i, int j, symbol_t symbol);
   bool count_cells(symbol_t cell);
   void click_on_board(int line, int column, symbol_t symbol);
 };
@@ -115,6 +100,22 @@ public:
   symbol_t get_symbol();
   void switch_player();
   void update_game(SDL_Renderer *renderer);
+};
+class Ai
+{
+private:
+  const int maxEval = INT_MAX;
+  const int minEval = INT_MIN;
+  symbol_t currentPlayer;
+
+public:
+//  IA();
+  void calc_move(Game& game, Board& board, int depth);
+  int calc_min(Game& game, Board& board, int depth);
+  int calc_max(Game& game, Board& board, int depth);
+  int score_pawns(int pawns, int player);
+  int eval(Game& game, Board &board);
+  int count_pawns(Board &board);
 };
 
 #endif

@@ -18,6 +18,11 @@ using namespace std;
     return board;
   }
 
+  void Board::set_case(int i, int j, symbol_t symbol)
+  {
+    board[i][j] = symbol;
+  }
+  
   bool Board::count_cells(symbol_t cell)
   {
     int count = 0;
