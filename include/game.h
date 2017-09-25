@@ -8,6 +8,7 @@ using namespace std;
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <cmath>
+#include <climits>
 
 #define BOARD_SIZE 3
 #define SCREEN_WIDTH 640.0
@@ -17,7 +18,7 @@ using namespace std;
 
 #define EMPTY 0
 #define PLAYER_X 1
-#define PLAYER_0 2
+#define PLAYER_O 2
 
 #define RUNNING_STATE 0
 #define PLAYER_X_WON_STATE 1
@@ -34,11 +35,27 @@ using namespace std;
 #define PLAYER_O_COLOR 2
 #define TIE_COLOR 3
 
-enum symbol_t { cross, circle, empty};
+enum symbol_t { empty, cross, circle};
 typedef array<array<symbol_t, BOARD_SIZE>, BOARD_SIZE> board_t;
 
 void sdl_print_error(int errorNum);
 void run_game(SDL_Renderer *renderer);
+
+class Ai
+{
+private:
+  const int maxEval = INT_MAX;
+  const int minEval = INT_MIN;
+
+public:
+  IA();
+  void calc_move(Game& game, int depth);
+  int calc_min(Game& game, int depth);
+  int calc_Max(Game& game, int depth);
+  int score_pawns(int pawns, int player);
+  int eval(Game& game);
+  int count_pawns(Game& game);
+};
 
 class Board
 {
@@ -91,6 +108,7 @@ public:
   Game(Board& board);
   void init(Board& board);
   int get_state();
+  int get_player_turn();
   void set_state(int newState);
   bool check_player_won(symbol_t symbol);
   void update_state(Board board);
