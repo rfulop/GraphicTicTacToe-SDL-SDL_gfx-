@@ -13,7 +13,7 @@ using namespace std;
 #include <thread>
 #include <ctime>
 
-#define BOARD_SIZE 5
+#define BOARD_SIZE 3
 #define PAWNS_TO_WIN 3
 #define AI_EASY BOARD_SIZE / BOARD_SIZE
 #define AI_MEDIUM BOARD_SIZE
