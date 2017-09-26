@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   game.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rfulop <rfulop@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/09/26 22:37:56 by rfulop            #+#    #+#             */
+/*   Updated: 2017/09/26 22:38:43 by rfulop           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GAME_H_
 #define GAME_H_
 
@@ -13,8 +25,8 @@ using namespace std;
 #include <thread>
 #include <ctime>
 
-#define BOARD_SIZE 3
-#define PAWNS_TO_WIN 3
+#define BOARD_SIZE 7
+#define PAWNS_TO_WIN 4
 #define AI_EASY BOARD_SIZE / BOARD_SIZE
 #define AI_MEDIUM BOARD_SIZE
 #define AI_HARD BOARD_SIZE * BOARD_SIZE

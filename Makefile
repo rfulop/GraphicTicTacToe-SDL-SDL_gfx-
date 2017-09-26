@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rfulop <marvin@42.fr>                      +#+  +:+       +#+         #
+#    By: rfulop <rfulop@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2017/05/03 01:01:12 by rfulop            #+#    #+#              #
-#    Updated: 2017/05/30 20:45:36 by rfulop           ###   ########.fr        #
+#    Created: 2017/09/26 22:39:39 by rfulop            #+#    #+#              #
+#    Updated: 2017/09/26 22:39:40 by rfulop           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = g++
 CFLAGS = -Wall -Wextra -Werror
-NAME = morpion
+NAME = tictactoe
 
 SRC_PATH = ./src/
 OBJ_PATH = ./obj/
