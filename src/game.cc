@@ -6,7 +6,7 @@
 /*   By: rfulop <rfulop@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/26 22:39:19 by rfulop            #+#    #+#             */
-/*   Updated: 2017/09/26 22:39:20 by rfulop           ###   ########.fr       */
+/*   Updated: 2018/01/15 17:25:50 by rfulop           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ using namespace std;
 
   void Game::init(Board& board)
   {
+    std::srand(std::time(0));
     state = RUNNING_STATE;
     playerTurn = PLAYER_X;
     board.init();

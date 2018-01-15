@@ -6,7 +6,7 @@
 /*   By: rfulop <rfulop@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/26 22:39:27 by rfulop            #+#    #+#             */
-/*   Updated: 2017/09/26 22:39:27 by rfulop           ###   ########.fr       */
+/*   Updated: 2018/01/15 17:59:22 by rfulop           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void run_game(SDL_Renderer *renderer)
       }
     }
     else if (game.get_state() == RUNNING_STATE)
-      ai.play(game, board, AI_EASY);
+      ai.play(game, board, DIFFICULTY);
     else
     {
       sleep_until(system_clock::now() + seconds(1));

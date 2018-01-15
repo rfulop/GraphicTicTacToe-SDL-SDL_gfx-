@@ -6,7 +6,7 @@
 /*   By: rfulop <rfulop@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/26 22:38:50 by rfulop            #+#    #+#             */
-/*   Updated: 2017/09/26 22:38:56 by rfulop           ###   ########.fr       */
+/*   Updated: 2018/01/15 17:28:25 by rfulop           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void Ai::play(Game &game, Board &board, int depth)
       {
         game.play_move(board, i, j);
         tmp = calc_min(game, board, depth - 1);
-        if (tmp > max || ((tmp == max) && (rand()%2)))
+        if (tmp > max || ((tmp == max) && (std::rand()%2 == 0)))
         {
           max = tmp;
           maxI = i;
@@ -173,7 +173,7 @@ int Ai::calc_min(Game &game, Board &board, int depth)
       {
             game.play_move(board, i, j);
             tmp = calc_max(game, board, depth -1);
-            if (tmp < min)
+            if (tmp < min || ((tmp == min) && (std::rand()%2 == 0)))
               min = tmp;
             game.cancel_move(board, i, j);
       }
@@ -198,7 +198,7 @@ int Ai::calc_max(Game &game, Board &board, int depth)
       {
             game.play_move(board, i, j);
             tmp = calc_min(game, board, depth -1);
-            if (tmp > max)
+            if (tmp > max || ((tmp == max) && (std::rand()%2 == 0)))
               max = tmp;
             game.cancel_move(board, i, j);
       }

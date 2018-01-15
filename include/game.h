@@ -6,7 +6,7 @@
 /*   By: rfulop <rfulop@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/26 22:37:56 by rfulop            #+#    #+#             */
-/*   Updated: 2017/09/26 22:38:43 by rfulop           ###   ########.fr       */
+/*   Updated: 2018/01/15 17:58:59 by rfulop           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,14 @@ using namespace std;
 #include <thread>
 #include <ctime>
 
-#define BOARD_SIZE 7
-#define PAWNS_TO_WIN 4
+#define BOARD_SIZE 3
+#define PAWNS_TO_WIN 3
 #define AI_EASY BOARD_SIZE / BOARD_SIZE
 #define AI_MEDIUM BOARD_SIZE
 #define AI_HARD BOARD_SIZE * BOARD_SIZE
+
+#define DIFFICULTY AI_EASY
+
 #define SCREEN_WIDTH 640.0
 #define SCREEN_HEIGHT 480.0
 #define CELL_WIDTH (SCREEN_WIDTH / BOARD_SIZE)
@@ -59,6 +62,13 @@ typedef array<array<symbol_t, BOARD_SIZE>, BOARD_SIZE> board_t;
 
 void sdl_print_error(int errorNum);
 void run_game(SDL_Renderer *renderer);
+
+typedef struct s_env
+{
+    int difficulty;
+    int pawnsToWin;
+    int bordSize;
+}               t_env;
 
 class Board
 {
